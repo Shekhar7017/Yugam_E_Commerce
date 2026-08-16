@@ -27,7 +27,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ orde
 
   const pdfBuffer = await generateInvoicePDF(order as any);
 
-  return new Response(pdfBuffer, {
+  return new Response(new Uint8Array(pdfBuffer), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="invoice-${order.orderNumber}.pdf"`,

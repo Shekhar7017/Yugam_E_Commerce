@@ -1,20 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { formatINR } from "@/lib/utils";
 import { buildCarrierTrackingUrl } from "@/lib/carrier-tracking";
+import { Type, type FunctionDeclaration } from "@google/genai";
 
 // Gemini's function-calling schema: flat {name, description, parameters}
 // objects (no OpenAI-style {type:"function", function:{...}} wrapper), and
 // JSON-schema types as uppercase strings (STRING, OBJECT, etc).
-export const AI_TOOLS = [
+export const AI_TOOLS: FunctionDeclaration[] = [
   {
     name: "search_products",
     description:
       "Search the live product catalog by keyword and optional category. Always use this before recommending or describing specific products.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
-        query: { type: "STRING", description: "Search keywords, e.g. 'rudraksha mala' or 'diwali gift'" },
-        categorySlug: { type: "STRING", description: "Optional category slug to filter by" },
+        query: { type: Type.STRING, description: "Search keywords, e.g. 'rudraksha mala' or 'diwali gift'" },
+        categorySlug: { type: Type.STRING, description: "Optional category slug to filter by" },
       },
       required: ["query"],
     },
@@ -23,10 +24,10 @@ export const AI_TOOLS = [
     name: "get_order_status",
     description: "Look up the status of a specific order using the order number and the email used at checkout.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
-        orderNumber: { type: "STRING" },
-        email: { type: "STRING" },
+        orderNumber: { type: Type.STRING },
+        email: { type: Type.STRING },
       },
       required: ["orderNumber", "email"],
     },
@@ -35,15 +36,15 @@ export const AI_TOOLS = [
     name: "check_coupon",
     description: "Check whether a coupon code is valid and what discount it offers.",
     parameters: {
-      type: "OBJECT",
-      properties: { code: { type: "STRING" } },
+      type: Type.OBJECT,
+      properties: { code: { type: Type.STRING } },
       required: ["code"],
     },
   },
   {
     name: "list_categories",
     description: "List all available product categories in the store.",
-    parameters: { type: "OBJECT", properties: {} },
+    parameters: { type: Type.OBJECT, properties: {} },
   },
 ];
 
