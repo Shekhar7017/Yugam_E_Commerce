@@ -1,5 +1,6 @@
 export type SiteSettings = {
   storeName: string;
+  logoUrl: string;
   footerTagline: string;
   heroBadgeText: string;
   heroHeading: string;
@@ -15,6 +16,7 @@ export type SiteSettings = {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   storeName: "Divine Store",
+  logoUrl: " ",
   footerTagline: "Handpicked idols, malas, and puja essentials, curated with care for your everyday devotion.",
   heroBadgeText: "Sacred • Handpicked • Delivered",
   heroHeading: "Bring devotion home",

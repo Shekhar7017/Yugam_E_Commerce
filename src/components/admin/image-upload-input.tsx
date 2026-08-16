@@ -22,18 +22,24 @@ export function ImageUploadInput({
 
   const upload = async (file: File) => {
     setIsUploading(true);
+
     try {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("folder", folder);
 
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
       const data = await res.json();
 
       if (!res.ok) {
         toast.error(data.error ?? "Upload failed");
         return;
       }
+
       onChange(data.url);
       toast.success("Image uploaded");
     } catch {
@@ -43,15 +49,43 @@ export function ImageUploadInput({
     }
   };
 
+  // Check whether the stored value is a usable image URL
+  const isValidImageUrl = (url: string) => {
+    if (!url) return false;
+
+    // Allow local paths such as /logo.png
+    if (url.startsWith("/")) return true;
+
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const hasValidImage = isValidImageUrl(value);
+
   return (
     <div className="space-y-2">
-      {label && <label className="text-sm font-medium">{label}</label>}
+      {label && (
+        <label className="text-sm font-medium">
+          {label}
+        </label>
+      )}
 
-      {value ? (
+      {hasValidImage ? (
         <div className="relative w-full max-w-[200px]">
           <div className="relative aspect-square rounded-md overflow-hidden bg-muted border">
-            <Image src={value} alt="Uploaded" fill className="object-cover" />
+            <Image
+              src={value}
+              alt="Uploaded"
+              fill
+              className="object-cover"
+              sizes="200px"
+            />
           </div>
+
           <button
             type="button"
             onClick={() => onChange("")}
@@ -71,17 +105,24 @@ export function ImageUploadInput({
           onDrop={(e) => {
             e.preventDefault();
             setIsDragging(false);
+
             const file = e.dataTransfer.files?.[0];
-            if (file) upload(file);
+
+            if (file) {
+              upload(file);
+            }
           }}
           onClick={() => inputRef.current?.click()}
           className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer transition-colors ${
-            isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/30"
+            isDragging
+              ? "border-primary bg-primary/5"
+              : "border-muted-foreground/30"
           }`}
         >
           {isUploading ? (
             <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 size={20} className="animate-spin" /> Uploading...
+              <Loader2 size={20} className="animate-spin" />
+              Uploading...
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
@@ -89,6 +130,7 @@ export function ImageUploadInput({
               Click or drag an image here
             </div>
           )}
+
           <input
             ref={inputRef}
             type="file"
@@ -96,7 +138,11 @@ export function ImageUploadInput({
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              if (file) upload(file);
+
+              if (file) {
+                upload(file);
+              }
+
               e.target.value = "";
             }}
           />
@@ -104,10 +150,13 @@ export function ImageUploadInput({
       )}
 
       <div className="flex items-center gap-2">
-        <span className="text-xs text-muted-foreground">or paste a URL:</span>
+        <span className="text-xs text-muted-foreground">
+          or paste a URL:
+        </span>
+
         <input
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value.trim())}
           placeholder="https://..."
           className="flex-1 border rounded-md px-2 py-1 text-xs bg-background"
         />

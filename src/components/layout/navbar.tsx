@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Search, Heart, ShoppingBag, Menu, Sun, Moon, X } from "lucide-react";
 import { useTheme } from "@/components/providers";
@@ -17,7 +18,7 @@ const CATEGORIES = [
   { name: "Gift Boxes", href: "/category/gift-boxes" },
 ];
 
-export function Navbar({ storeName }: { storeName: string }) {
+export function Navbar({ storeName, logoUrl }: { storeName: string; logoUrl?: string }) {
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -36,7 +37,12 @@ export function Navbar({ storeName }: { storeName: string }) {
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          <Link href="/" className="font-display text-2xl tracking-wide">
+          <Link href="/" className="flex items-center gap-2 font-display text-2xl tracking-wide">
+            {logoUrl && logoUrl.trim() && (
+              <span className="relative w-8 h-8 shrink-0">
+                <Image src={logoUrl} alt={storeName} fill className="object-contain" />
+              </span>
+            )}
             {storeName}
           </Link>
 

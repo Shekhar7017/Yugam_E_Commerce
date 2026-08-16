@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
 
     icons:{
-      icon: "/fevicon.ico",
+      icon: "/favicon.ico",
     },
     openGraph: {
       title: settings.storeName,
@@ -45,7 +45,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${sans.variable} font-sans`}>
         <Providers>
-          <Navbar storeName={settings.storeName} />
+          <Navbar storeName={settings.storeName} logoUrl={settings.logoUrl} />
           <main className="min-h-screen">{children}</main>
           <Footer storeName={settings.storeName} tagline={settings.footerTagline} />
           <DivineAssistant />

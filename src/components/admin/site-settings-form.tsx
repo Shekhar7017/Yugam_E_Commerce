@@ -35,6 +35,17 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettings }) {
     <div className="max-w-2xl space-y-8">
       <section className="bg-card border rounded-lg p-6">
         <h2 className="font-medium mb-4">Store Branding</h2>
+        <div>
+          <ImageUploadInput
+            label="Logo (shown next to store name in navbar)"
+            value={settings.logoUrl}
+            onChange={(url) => setSettings((s)=> ({...s, logoUrl:url}))} 
+            folder="branding"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            Leave Blank to show just the store name as text.
+          </p>
+        </div>
         <div className="space-y-3">
           <div>
             <label className="text-sm font-medium">Store Name</label>
