@@ -106,10 +106,10 @@ export default async function ProductPage({ params }: Props) {
             </p>
           )}
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl font-semibold">{formatINR(product.price)}</span>
+            <span className="text-2xl font-semibold">{formatINR(product.price.toString())}</span>
             {product.compareAtPrice && (
               <span className="text-muted-foreground line-through">
-                {formatINR(product.compareAtPrice)}
+                {formatINR(product.compareAtPrice?.toString() ?? "")}
               </span>
             )}
           </div>

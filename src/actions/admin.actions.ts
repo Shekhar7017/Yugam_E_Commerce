@@ -395,6 +395,7 @@ export async function createFestival(data: {
   image?: string;
   ctaLabel?: string;
   ctaLink?: string;
+  hasTextOverlay?: boolean;
   startDate?: string;
   endDate?: string;
   sortOrder?: number;
@@ -408,6 +409,7 @@ export async function createFestival(data: {
       image: data.image || undefined,
       ctaLabel: data.ctaLabel || "Shop Now",
       ctaLink: data.ctaLink || "/",
+      hasTextOverlay: data.hasTextOverlay ?? true,
       startDate: data.startDate ? new Date(data.startDate) : undefined,
       endDate: data.endDate ? new Date(data.endDate) : undefined,
       sortOrder: data.sortOrder ?? 0,
@@ -427,6 +429,7 @@ export async function updateFestival(
     image?: string;
     ctaLabel?: string;
     ctaLink?: string;
+    hasTextOverlay?: boolean;
     startDate?: string;
     endDate?: string;
     sortOrder?: number;
@@ -442,6 +445,7 @@ export async function updateFestival(
       image: data.image || null,
       ctaLabel: data.ctaLabel || "Shop Now",
       ctaLink: data.ctaLink || "/",
+      hasTextOverlay: data.hasTextOverlay ?? true,
       startDate: data.startDate ? new Date(data.startDate) : null,
       endDate: data.endDate ? new Date(data.endDate) : null,
       sortOrder: data.sortOrder ?? 0,
@@ -451,6 +455,8 @@ export async function updateFestival(
   revalidatePath("/");
   return { success: true };
 }
+
+
 
 export async function toggleFestivalActive(id: string, isActive: boolean) {
   await requireAdmin();

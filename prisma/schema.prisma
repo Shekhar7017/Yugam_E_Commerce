@@ -454,6 +454,7 @@ model Festival {
   image        String?
   ctaLabel     String    @default("Shop Now")
   ctaLink      String    @default("/")
+  hasTextOverlay Boolean @default(true)
   startDate    DateTime?
   endDate      DateTime?
   isActive     Boolean   @default(true)

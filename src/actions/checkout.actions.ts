@@ -166,8 +166,12 @@ export async function placeOrder(input: unknown) {
       const { subject, html } = orderConfirmationEmail({
         customerName: recipient.name,
         orderNumber: order.orderNumber,
-        items: order.items,
-        total,
+        items: order.items.map((item) => ({
+          titleSnapshot: item.titleSnapshot,
+          quantity: item.quantity,
+          price: item.price.toString(),
+        })),
+        total: order.total.toString(),
         paymentMethod: "COD",
       });
       await sendEmail(recipient.email, subject, html);
@@ -201,8 +205,12 @@ export async function confirmRazorpayPayment(orderId: string, paymentData: {
     const { subject, html } = orderConfirmationEmail({
       customerName: recipient.name,
       orderNumber: order.orderNumber,
-      items: order.items,
-      total: order.total,
+      items: order.items.map((item) => ({
+        titleSnapshot: item.titleSnapshot,
+        quantity: item.quantity,
+        price: item.price.toString(),
+      })),
+      total: order.total.toString(),
       paymentMethod: "RAZORPAY",
     });
     await sendEmail(recipient.email, subject, html);

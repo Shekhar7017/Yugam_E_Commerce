@@ -15,15 +15,13 @@ const EMPTY = {
   ctaLink: "/",
   startDate: "",
   endDate: "",
+  hasTextOverlay: true,
 };
 
 export function FestivalForm() {
   const [form, setForm] = useState(EMPTY);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  const set = (key: keyof typeof EMPTY) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
 
   return (
     <form
@@ -42,33 +40,88 @@ export function FestivalForm() {
         });
       }}
     >
-      <input required value={form.title} onChange={set("title")} placeholder="Title, e.g. Diwali Sale"
-        className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
-      <input value={form.subtitle} onChange={set("subtitle")} placeholder="Subtitle (optional)"
-        className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
-      <input value={form.discountText} onChange={set("discountText")} placeholder="Discount badge text, e.g. 'Up to 30% off'"
-        className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
+      <div>
+        <label className="text-sm font-medium block mb-1">Banner Type</label>
+        <div className="flex border rounded-md overflow-hidden text-sm">
+          <button
+            type="button"
+            onClick={() => setForm((f) => ({ ...f, hasTextOverlay: true }))}
+            className={`flex-1 py-2 transition-colors ${form.hasTextOverlay ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"}`}
+          >
+            With Text
+          </button>
+          <button
+            type="button"
+            onClick={() => setForm((f) => ({ ...f, hasTextOverlay: false }))}
+            className={`flex-1 py-2 transition-colors ${!form.hasTextOverlay ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"}`}
+          >
+            Image Only
+          </button>
+        </div>
+        {!form.hasTextOverlay && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Use this when the text is already part of your uploaded image.
+          </p>
+        )}
+      </div>
+
+      <input
+        required
+        value={form.title}
+        onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+        placeholder={form.hasTextOverlay ? "Title, e.g. Diwali Sale" : "Internal label (for your reference only)"}
+        className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+      />
+
+      {form.hasTextOverlay && (
+        <>
+          <input
+            value={form.subtitle}
+            onChange={(e) => setForm((f) => ({ ...f, subtitle: e.target.value }))}
+            placeholder="Subtitle (optional)"
+            className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+          />
+          <input
+            value={form.discountText}
+            onChange={(e) => setForm((f) => ({ ...f, discountText: e.target.value }))}
+            placeholder="Discount badge text, e.g. 'Up to 30% off'"
+            className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+          />
+        </>
+      )}
+
       <ImageUploadInput
-        label="Background Image"
+        label="Banner Image"
         value={form.image}
         onChange={(url) => setForm((f) => ({ ...f, image: url }))}
         folder="festivals"
       />
-      <div className="grid grid-cols-2 gap-3">
-        <input value={form.ctaLabel} onChange={set("ctaLabel")} placeholder="Button label"
-          className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
-        <input value={form.ctaLink} onChange={set("ctaLink")} placeholder="Button link, e.g. /category/idols"
-          className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
-      </div>
+
+      {form.hasTextOverlay && (
+        <input
+          value={form.ctaLabel}
+          onChange={(e) => setForm((f) => ({ ...f, ctaLabel: e.target.value }))}
+          placeholder="Button label"
+          className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+        />
+      )}
+
+      <input
+        value={form.ctaLink}
+        onChange={(e) => setForm((f) => ({ ...f, ctaLink: e.target.value }))}
+        placeholder="Where the banner links to, e.g. /category/idols"
+        className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+      />
+
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="text-xs text-muted-foreground">Starts</label>
-          <input type="date" value={form.startDate} onChange={set("startDate")}
+          <input type="date" value={form.startDate} onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
             className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
         </div>
         <div>
           <label className="text-xs text-muted-foreground">Ends</label>
-          <input type="date" value={form.endDate} onChange={set("endDate")}
+          <input type="date" value={form.endDate} onChange={(e) => setForm((f) => ({ ...f, endDate: e.target.value }))}
             className="w-full border rounded-md px-3 py-2 text-sm bg-background" />
         </div>
       </div>

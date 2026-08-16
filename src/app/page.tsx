@@ -9,7 +9,7 @@ import {
 import { getActiveFestivals } from "@/actions/festival.actions";
 import { getSiteSettings } from "@/actions/settings.actions";
 import { ProductCard } from "@/components/product/product-card";
-import { FestivalBanner } from "@/components/home/festival-banner";
+import { HeroSlideshow } from "@/components/home/hero-slideshow";
 
 export default async function HomePage() {
   const [featured, bestSellers, newArrivals, categories, festivals, settings] = await Promise.all([
@@ -24,34 +24,9 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative h-[70vh] min-h-[480px] flex items-center justify-center text-center overflow-hidden bg-secondary">
-        {settings.heroImage && (
-          <Image
-            src={settings.heroImage}
-            alt={settings.heroHeading}
-            fill
-            priority
-            className="object-cover brightness-[0.55]"
-          />
-        )}
-        <div className="relative z-10 text-white px-6">
-          <p className="uppercase tracking-[0.3em] text-xs mb-4 text-marigold">
-            {settings.heroBadgeText}
-          </p>
-          <h1 className="font-display text-5xl md:text-6xl leading-tight max-w-2xl mx-auto text-balance">
-            {settings.heroHeading}
-          </h1>
-          <p className="mt-4 max-w-md mx-auto opacity-90">{settings.heroSubheading}</p>
-          <Link
-            href={settings.heroCtaLink}
-            className="inline-block mt-8 bg-accent text-accent-foreground px-8 py-3 rounded-md font-medium hover:opacity-90 transition-opacity"
-          >
-            {settings.heroCtaLabel}
-          </Link>
-        </div>
-      </section>
+      
 
-      <FestivalBanner festivals={festivals as any} />
+      <HeroSlideshow settings={settings} festivals={festivals as any} />
 
       {/* Categories */}
       <section className="container py-20">
