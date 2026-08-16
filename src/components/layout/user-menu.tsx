@@ -47,6 +47,9 @@ export function UserMenu() {
           <Link href="/account/orders" onClick={() => setOpen(false)} className="block px-4 py-2 hover:bg-muted">
             My Orders
           </Link>
+          <Link href="/account/profile" onClick={() => setOpen(false)} className="block px-4 py-2 hover:bg-muted">
+           Change Password
+          </Link>
           <Link href="/account/wishlist" onClick={() => setOpen(false)} className="block px-4 py-2 hover:bg-muted">
             Wishlist
           </Link>

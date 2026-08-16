@@ -25,6 +25,8 @@ export function Footer({ storeName, tagline }: { storeName: string; tagline: str
             <li><Link href="/blog">Blog</Link></li>
             <li><Link href="/policies/shipping">Shipping Policy</Link></li>
             <li><Link href="/policies/returns">Returns & Refunds</Link></li>
+            <li ><Link href="/policies/privacy">Privacy Policy</Link></li>
+            <li><Link href="/policies/terms">Terms & Conditions</Link></li>
             <li><Link href="/contact">Contact Us</Link></li>
           </ul>
         </div>
