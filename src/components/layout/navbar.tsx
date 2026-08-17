@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Search, Heart, ShoppingBag, Menu, Sun, Moon, X } from "lucide-react";
 import { useTheme } from "@/components/providers";
 import { UserMenu } from "@/components/layout/user-menu";
+import { useSession, signOut} from "next-auth/react";
 import { cn } from "@/lib/utils";
 
 const CATEGORIES = [
@@ -76,23 +77,55 @@ export function Navbar({ storeName, logoUrl }: { storeName: string; logoUrl?: st
         </div>
 
         {menuOpen && (
-          <nav className="lg:hidden container pb-4 flex flex-col gap-3 text-sm">
-            {CATEGORIES.map((c) => (
-              <Link key={c.href} href={c.href} onClick={() => setMenuOpen(false)}>
-                {c.name}
-              </Link>
-            ))}
-            <div className="border-t pt-3 flex flex-col gap-3">
-              <Link href="/account/orders" onClick={() => setMenuOpen(false)}>
-                My Orders
-              </Link>
-              <Link href="/login" onClick={() => setMenuOpen(false)}>
-                Login / Register
-              </Link>
-            </div>
-          </nav>
+          <MobileMenuLinks onClose={() =>setMenuOpen(false)} />
         )}
       </div>
     </header>
+  );
+}
+function MobileMenuLinks({ onClose }: { onClose: () => void }) {
+  const { data: session, status } = useSession();
+
+  return (
+    <nav className="lg:hidden container pb-4 flex flex-col gap-3 text-sm">
+      {CATEGORIES.map((c) => (
+        <Link key={c.href} href={c.href} onClick={onClose}>
+          {c.name}
+        </Link>
+      ))}
+      <div className="border-t pt-3 flex flex-col gap-3">
+        {status === "loading" ? null : session?.user ? (
+          <>
+            <Link href="/account/orders" onClick={onClose}>
+              My Orders
+            </Link>
+            <Link href="/account/wishlist" onClick={onClose}>
+              Wishlist
+            </Link>
+            <Link href="/account/profile" onClick={onClose}>
+              Change Password
+            </Link>
+            {(session.user as any).role === "ADMIN" && (
+              <Link href="/admin" onClick={onClose}>
+                Admin Panel
+              </Link>
+            )}
+            <button
+              onClick={() => {
+                onClose();
+                signOut({ callbackUrl: "/" });
+              }}
+              className="text-left text-destructive"
+            >
+              Log Out
+            </button>
+          </>
+        ) : (
+          <Link href="/login/customer" onClick={onClose}>
+            Login / Register
+          </Link>
+        )}
+      </div>
+    </nav>
   );
 }
